@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>search4faces: api (апи)</title>
+  <meta content="поисковая система распознавания лиц, инструмент обратного поиска изображений и механизм поиска фотографий, используемый для определения того, где ваше лицо появляется в сети." name="description">
+  <meta content="поисковая система,распознование фотографий" name="keywords">
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.6.3/css/flag-icons.min.css" integrity="sha512-uvXdJud8WaOlQFjlz9B15Yy2Au/bMAvz79F7Xa6OakCl2jvQPdHD0hb3dEqZRdSwG4/sknePXlE7GiarwA/9Wg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="assets/css/variables.css" rel="stylesheet">
+  <link href="assets/css/main.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top" data-scrollto-offset="0">
+    <div class="container-fluid d-flex align-items-center justify-content-around">
+
+      <a href="index.html" class="logo d-flex align-items-center me-auto me-lg-0">
+        <!-- <img src="assets/img/logo.png" alt=""> -->
+        <h1><span>search4faces</span></h1>
+      </a>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+
+          <li><a class="nav-link" href="index.html"><span>Главная</span></a></li>
+          <li><a class="nav-link" href="search.html">Поиск</a></li>
+          <li><a class="nav-link" href="about.html">О нас</a></li>
+<!--          <li><a class="nav-link" href="optout.html">Удалить себя</a></li> -->
+          <li><a class="nav-link" href="faq.html">FAQ</a></li>
+<!--          <li><a class="nav-link" href="history.html">История поисков</a></li> -->
+          <li><a class="nav-link" href="contact.html">Контакты</a></li>
+          <li><a class="nav-link active" href="api.html">АПИ</a></li>
+
+          <li class="dropdown"><a href="#"><i class="lang fi fi-ru"></i><span>Русский</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+            <ul>
+              <li><a href="/en/index.html" class="d-block"><i class="lang fi fi-us"></i><span>English</span></a></li>
+            </ul>
+          </li>
+
+
+<!--
+            <li class="dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="changeLang" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="lang fi fi-ru"></i><span>Русский</span></a>
+              <div class="dropdown-menu p-0" aria-labelledby="dropdown09">
+                <a class="dropdown-item d-inline-block" style="color: rgba(var(--color-secondary-dark-rgb), 0.7);" href="/en/index.html"><i class="lang fi fi-us"></i><span>English</span></a>
+               </div>
+            </li>
+-->
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle d-none"></i>
+      </nav><!-- .navbar -->
+
+      <a class="btn-account" href="#" data-bs-toggle="modal" data-bs-target="#modalLoginForm">Войти</a>
+
+    </div>
+  </header><!-- End Header -->
+  <main id="main">
+    <section id="api-services" class="api-services">
+      <div class="container">
+        <div class="section-header">
+          <h2>Документация по <strong>API</strong> сайта search4faces.com</h2>
+        </div>
+        <div class="content">
+          <p>Работа с Search4faces API построена на архитектуре <a href="http://www.jsonrpc.org/specification">JSON-RPC 2.0</a>.</p>
+          <p>Запрос обязательно должен содержать следующие HTTP-заголовки:</p>
+          <p><code>Content-Type: application/json</code></p>
+          <p><code>x-authorization-token: ваш_API_ключ</code></p>
+          <p>URL для отправки запросов:</p>
+          <p><code>https://search4faces.com/api/json-rpc/v1</code></p>
+          <p>Если вы хотите бесплатно попробовать подключение по API <a href="contact.html">свяжитесь с нами</a> и мы вам вышлем тестовый ключ. Примеры кода доступны на <a href="api_test_php.zip">PHP</a> и <a href="api_test_py.zip">Python</a>.</p>
+
+          <h3 class="pt-3">rateLimit</h3>
+          <p class="fst-italic">Проверка текущих ограничений для вашего ключа.</p>
+
+          <p>Пример запроса:</p>
+          <pre>
+      <span>{</span>
+      <span>&quot;jsonrpc&quot;:&nbsp;&quot;2.0&quot;,</span>
+      <span>&quot;method&quot;:&nbsp;&quot;rateLimit&quot;,</span>
+      <span>&quot;id&quot;:&nbsp;&quot;some-id&quot;,</span>
+      <span>&quot;params&quot;:{}</span>
+      <span>}</span>
+          </pre>
+
+          <p>Метод не имеет параметров.</p>
+
+          <p>Результат успешного выполнения:</p>
+          <pre>
+      <span>{</span>
+        <span>&quot;jsonrpc&quot;:&nbsp;&quot;2.0&quot;,</span>
+        <span>&quot;result&quot;:&nbsp;{</span>
+          <span>&quot;apikey&quot;:&nbsp;&quot;5c40b9-b246ab-648561-435157-2c3f8b&quot;,</span>
+          <span>&quot;limit&quot;:&nbsp;10000,</span>
+          <span>&quot;remaining&quot;:&nbsp;9954,</span>
+          <span>&quot;enddate&quot;:&nbsp;2022-03-05 00:00:00,</span>
+          <span>&quot;speed&quot;:&nbsp;8,</span>
+          <span>&quot;allowed&quot;:&nbsp;[</span>
+            <span>&quot;rateLimit&quot;,</span>
+            <span>&quot;detectFaces&quot;,</span>
+            <span>&quot;searchFace&quot;</span>
+          <span>],</span>
+          <span>&quot;disabled&quot;:&nbsp;&quot;no&quot;</span>
+        <span>},</span>
+        <span>&quot;id&quot;:&nbsp;&quot;some-id&quot;</span>
+      <span>}</span>
+          </pre>
+
+          <p>Поля возвращаемого объекта:</p>
+          <pre>
+      apikey (str) - используемый вами ключ
+      limit (int) - запросов предоставлено
+      remaining (int) - неиспользованных запросов
+      enddate (datetime) - срок действия, до
+      speed (int) - запросов в минуту, не более
+      allowed (array[str]) - список доступных методов
+      disabled (bool) - текущий статус ключа
+          </pre>
+
+          <h3 class="pt-3">detectFaces</h3>
+          <p class="fst-italic">Обнаружение лиц на изображении.</p>
+
+          <p>Пример запроса:</p>
+          <pre>
+      <span>{</span>
+        <span>&quot;jsonrpc&quot;:&nbsp;&quot;2.0&quot;,</span>
+        <span>&quot;method&quot;:&nbsp;&quot;detectFaces&quot;,</span>
+        <span>&quot;id&quot;:&nbsp;&quot;some-id&quot;,</span>
+        <span>&quot;params&quot;:&nbsp;{</span>
+          <span>&quot;image&quot;:&nbsp;&quot;/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP/wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=&quot;</span>
+        <span>}</span>
+      <span>}</span>
+          </pre>
+
+          <p>Параметры:</p>
+          <pre>
+            <span>image (str) - исходное jpeg или png изображение кодированное в текст (base64)</span>
+          </pre>
+
+          <p>Результат успешного выполнения:</p>
+          <pre>
+      <span>{</span>
+        <span>&quot;jsonrpc&quot;:&nbsp;&quot;2.0&quot;,</span>
+        <span>&quot;result&quot;:&nbsp;{</span>
+        <span>&quot;image&quot;:&nbsp;&quot;5eb16c3421dd32.08349177.jpg&quot;,</span>
+          <span>&quot;faces&quot;:&nbsp;[</span>
+            <span>{</span>
+              <span>&quot;x&quot;:&nbsp;25,</span>
+              <span>&quot;y&quot;:&nbsp;37,</span>
+              <span>&quot;width&quot;:&nbsp;55,</span>
+              <span>&quot;height&quot;:&nbsp;67,</span>
+              <span>&quot;lm1_x&quot;:&nbsp;39,</span>
+              <span>&quot;lm1_y&quot;:&nbsp;68,</span>
+              <span>&quot;lm2_x&quot;:&nbsp;62,</span>
+              <span>&quot;lm2_y&quot;:&nbsp;62,</span>
+              <span>&quot;lm3_x&quot;:&nbsp;53,</span>
+              <span>&quot;lm3_y&quot;:&nbsp;80,</span>
+              <span>&quot;lm4_x&quot;:&nbsp;47,</span>
+              <span>&quot;lm4_y&quot;:&nbsp;90,</span>
+              <span>&quot;lm5_x&quot;:&nbsp;67,</span>
+              <span>&quot;lm5_y&quot;:&nbsp;84</span>
+            <span>},</span>
+            <span>{...}</span>
+          <span>]</span>
+        <span>},</span>
+        <span>&quot;scale&quot;:&nbsp;&quot;1&quot;</span>
+        <span>&quot;id&quot;:&nbsp;&quot;some-id&quot;</span>
+      <span>}</span>
+          </pre>
+
+          <p>Поля возвращаемого объекта:</p>
+          <pre>
+      image (str) - идентификатор изображения для передачи в метод searchFace
+      faces (array[obj]) - массив c координатами найденных лиц
+        x (int) - координата x прямоугольника ограничивающего лицо
+        y (int) - координата y прямоугольника ограничивающего лицо
+        width (int) - ширина прямоугольника ограничивающего лицо
+        height (int) - высота прямоугольника ограничивающего лицо
+        lm1_x (int) - координата x левого глаза
+        lm1_y (int) - координата y левого глаза
+        lm2_x (int) - координата x правого глаза
+        lm2_y (int) - координата y правого глаза
+        lm3_x (int) - координата x кончика носа
+        lm3_y (int) - координата y кончика носа
+        lm4_x (int) - координата x левого уголка губ
+        lm4_y (int) - координата y левого уголка губ
+        lm5_x (int) - координата x правого уголка губ
+        lm5_y (int) - координата y правого уголка губ
+      scale (float) - ?  
+          </pre>
+
+          <h3 class="pt-3">searchFace</h3>
+          <p class="fst-italic">Поиск похожих лиц в соцсетях.</p>
+  
+          <p>Пример запроса:</p>
+          <pre>
+      <span>{</span>
+        <span>&quot;jsonrpc&quot;:&nbsp;&quot;2.0&quot;,</span>
+        <span>&quot;method&quot;:&nbsp;&quot;searchFace&quot;,</span>
+        <span>&quot;id&quot;:&nbsp;&quot;some-id&quot;,</span>
+        <span>&quot;params&quot;:&nbsp;{</span>
+          <span>&quot;image&quot;:&nbsp;&quot;5eb16c3421dd32.08349177.jpg&quot;,</span>
+          <span>&quot;face&quot;:&nbsp;{</span>
+            <span>&quot;x&quot;:&nbsp;25,</span>
+            <span>&quot;y&quot;:&nbsp;37,</span>
+            <span>&quot;width&quot;:&nbsp;55,</span>
+            <span>&quot;height&quot;:&nbsp;67,</span>
+            <span>&quot;lm1_x&quot;:&nbsp;39,</span>
+            <span>&quot;lm1_y&quot;:&nbsp;68,</span>
+            <span>&quot;lm2_x&quot;:&nbsp;62,</span>
+            <span>&quot;lm2_y&quot;:&nbsp;62,</span>
+            <span>&quot;lm3_x&quot;:&nbsp;53,</span>
+            <span>&quot;lm3_y&quot;:&nbsp;80,</span>
+            <span>&quot;lm4_x&quot;:&nbsp;47,</span>
+            <span>&quot;lm4_y&quot;:&nbsp;90,</span>
+            <span>&quot;lm5_x&quot;:&nbsp;67,</span>
+            <span>&quot;lm5_y&quot;:&nbsp;84</span>
+          <span>},</span>
+          <span>&quot;source&quot;:&nbsp;&quot;vk_wall&quot;,</span>
+          <span>&quot;hidden&quot;:&nbsp;true,</span>
+          <span>&quot;results&quot;:&nbsp;&quot;10&quot;</span>
+          <span>&quot;lang&quot;:&nbsp;&quot;ru&quot;</span>
+        <span>}</span>
+      <span>}</span>
+          </pre>
+
+          <p>Параметры:</p>
+          <pre>
+      image (str) - идентификатор изображения, полученный в методе detectFaces
+      face (obj) - координаты лица, например, полученные в методе detectFaces
+        x (int) - координата x прямоугольника ограничивающего лицо
+        y (int) - координата y прямоугольника ограничивающего лицо
+        width (int) - ширина прямоугольника ограничивающего лицо
+        height (int) - высота прямоугольника ограничивающего лицо
+        lm1_x (int) - координата x левого глаза
+        lm1_y (int) - координата y левого глаза
+        lm2_x (int) - координата x правого глаза
+        lm2_y (int) - координата y правого глаза
+        lm3_x (int) - координата x кончика носа
+        lm3_y (int) - координата y кончика носа
+        lm4_x (int) - координата x левого уголка губ
+        lm4_y (int) - координата y левого уголка губ
+        lm5_x (int) - координата x правого уголка губ
+        lm5_y (int) - координата y правого уголка губ
+        source (str) - vkok_avatar или vk_wall или tt_avatar или ch_avatar или vkokn_avatar или sb_photo<!-- или in_avatar--> (база данных для поиска)
+        hidden (bool) - показывать в дополнение к общей выдаче также и скрытые профили
+        results (int) - максимальное количество выдаваемых профилей, не более 500
+        lang (str) - выбор языка для возвращаемых данных, по умолчанию "ru"
+          </pre>
+
+          <p>Результат успешного выполнения:</p>
+          <pre>
+      <span>{</span>
+        <span>&quot;jsonrpc&quot;:&nbsp;&quot;2.0&quot;,</span>
+        <span>&quot;result&quot;:&nbsp;{</span>
+          <span>&quot;profiles&quot;:&nbsp;[</span>
+            <span>{</span>
+              <span>&quot;score&quot;:&nbsp;&quot;94.70&quot;,</span>
+              <span>&quot;face&quot;:&nbsp;&quot;https://search4faces.com/faces/vk01/00/00/00/7/0.jpg&quot;,</span>
+              <span>&quot;profile&quot;:&nbsp;&quot;https://vk.com/id1&quot;,</span>
+              <span>&quot;photo&quot;:&nbsp;&quot;https://vk.com/id1?z=photo1_288668576%2Fphotos1&quot;,</span>
+              <span>&quot;photo_x&quot;:&nbsp;368,</span>
+              <span>&quot;photo_y&quot;:&nbsp;265,</span>
+              <span>&quot;photo_width&quot;:&nbsp;146,</span>
+              <span>&quot;photo_height&quot;:&nbsp;174,</span>
+              <span>&quot;source&quot;:&nbsp;&quot;https://sun9-3.userapi.com/c7003/v7003978/1ed9/yoeGXOWmW-M.jpg&quot;,</span>
+              <span>&quot;age&quot;:&nbsp;35,</span>
+              <span>&quot;first_name&quot;:&nbsp;&quot;Павел&quot;,</span>
+              <span>&quot;last_name&quot;:&nbsp;&quot;Дуров&quot;,</span>
+              <span>&quot;maiden_name&quot;:&nbsp;&quot;&quot;,</span>
+              <span>&quot;city&quot;:&nbsp;&quot;Санкт-Петербург&quot;,</span>
+              <span>&quot;country&quot;:&nbsp;&quot;Россия&quot;</span>
+            <span>},</span>
+            <span>{...}</span>
+          <span>]</span>
+        <span>},</span>
+        <span>&quot;id&quot;:&nbsp;&quot;some-id&quot;</span>
+      <span>}</span>
+          </pre>
+
+          <p>Поля возвращаемого объекта:</p>
+          <pre>
+      profiles (array[obj]) - массив c найденными профилями пользователей
+        score (float) - процент схожести
+        face (str) - адрес изображения лица сохранённое на сервере search4faces
+        profile (str) - адрес профиля пользователя
+        photo (str) - адрес страницы с изображением из профиля
+        photo_x (int) - координата x прямоугольника ограничивающего лицо
+        photo_y (int) - координата y прямоугольника ограничивающего лицо
+        photo_width (int) - ширина прямоугольника ограничивающего лицо
+        photo_height (int) - высота прямоугольника ограничивающего лицо
+        source (str) - адрес исходного изображения из профиля
+        age (int) - возраст указанный в профиле
+        first_name (str) - имя указанное в профиле
+        last_name (str) - фамилия указанная в профиле
+        maiden_name (str) - отчество указанное в профиле
+        city (str) - город проживания указанный в профиле
+        country (str) - строна проживания указанная в профиле
+          </pre>
+
+          <div id="price"><h2 class="pt-3">Тарифы АПИ</h2></div>
+          <h5 class="pt-4">5000</h5>
+          <ul class="mb-1">
+            <li>количество запросов: 5000</li>
+            <li>количество клиентов: до двух</li>
+            <li>rate limit: 10 запросов в минуту</li>
+            <li>срок действия: 30 дней</li>
+            <li>стоимость: 1900 рублей</li>
+          </ul>
+          <a href="contact.html">другой способ по запросу</a>
+
+          <h5 class="pt-4">15000</h5>
+          <ul class="mb-1">
+            <li>количество запросов: 15000</li>
+            <li>количество клиентов: до четырёх</li>
+            <li>rate limit: 15 запросов в минуту</li>
+            <li>срок действия: 30 дней</li>
+            <li>стоимость: 3800 рублей</li>
+          </ul>
+          <a href="contact.html">другой способ по запросу</a>
+
+          <h5 class="pt-4">45000</h5>
+          <ul class="mb-1">
+            <li>количество запросов: 45000</li>
+            <li>количество клиентов: до шести</li>
+            <li>rate limit: 20 запросов в минуту</li>
+            <li>срок действия: 30 дней</li>
+            <li>стоимость: 7600 рублей</li>
+          </ul>
+          <a href="contact.html">другой способ по запросу</a>
+ 
+          <h5 class="pt-4">135000</h5>
+          <ul class="mb-1">
+            <li>количество запросов: 135000</li>
+            <li>количество клиентов: до восьми</li>
+            <li>rate limit: до 30 запросов в минуту</li>
+            <li>срок действия: 30 дней</li>
+            <li>стоимость: 15200 рублей</li>
+          </ul>
+          <a href="contact.html">другой способ по запросу</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+
+    <div class="footer-content">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6">
+            <div class="footer-info">
+              <h3>search4faces:RU</h3>
+              <p>
+                <strong>Email:</strong> <a class="s4f-email-link" href="mailto:search4faces@gmail.com">search4faces@gmail.com</a><br>
+              </p>
+            </div>
+<!--
+            <div class=" footer-links">
+              <ul>
+                <li><i class="bi bi-chevron-right"></i> <a href="privacy.html">Privacy policy</a></li>
+                <li><i class="bi bi-chevron-right"></i> <a href="termsofuse.html">Terms of use</a></li>
+                <li><i class="bi bi-chevron-right"></i> <a href="dmca.html">Copyright / DMCA Policy</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" id="s4fAdmFoot" style="opacity:.55;text-decoration:none">⚙ Админка</a></li>
+              </ul>
+            </div>
+-->
+          </div>
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Главное меню</h4>
+            <ul>
+              <li><i class="bi bi-chevron-right"></i> <a href="search.html">Поиск</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="about.html">О нас</a></li>
+<!--              <li><i class="bi bi-chevron-right"></i> <a href="#">Удалить себя</a></li> -->
+              <li><i class="bi bi-chevron-right"></i> <a href="faq.html">FAQ</a></li>
+<!--              <li><i class="bi bi-chevron-right"></i> <a href="#">История поисков</a></li> -->
+              <li><i class="bi bi-chevron-right"></i> <a href="contact.html">Контакты</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="api.html">АПИ</a></li>
+
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Доступные базы</h4>
+            <ul>
+              <li><i class="bi bi-chevron-right"></i> <a href="search_public.html">Публичные персоны</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="search_vkwall.html">Фотографии профиля VK</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="search_vkok2022.html">Аватарки VK2022 и OK2022</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="search_clubhouse.html">Аватарки Клубхауса</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="search_tiktok.html">Аватарки Тиктока</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="search_vkok.html">Аватарки VK2020 и OK2020</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-4 col-md-6 footer-newsletter">
+            <h4>Подписаться на новости</h4>
+            <p>Введите свой электронный адрес в поле ниже и нажмите кнопку «Подписаться».</p>
+            <form action="#" id="subsFrm" method="post" class="php-email-form">
+              <input type="email" id="subscribeEmail"  autocomplete="on"><input type="submit" id="subscribeBtn" value="Подписаться">
+            </form>
+            <div id="subscribeStatusOk" class="status sent-message"></div>
+            <div id="subscribeStatusError" class="status error-message"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-legal text-center">
+      <div class="container d-flex flex-column flex-lg-row justify-content-center justify-content-lg-between align-items-center">
+
+        <div class="d-flex flex-column align-items-center align-items-lg-start">
+          <div class="copyright">
+            &copy; Copyright <strong><span>search4faces.com</span></strong>.
+          </div>
+        </div>
+<div>
+<a href="privacy.html">Privacy policy</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="termsofuse.html">Terms of use</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="dmca.html">Copyright / DMCA Policy</a>
+</div><script src="https://yastatic.net/share2/share.js"></script>
+        <div class="ya-share2" data-curtain data-services="messenger,vkontakte,odnoklassniki,telegram,twitter,viber,whatsapp,skype"></div>
+
+      </div>
+    </div>
+
+  </footer><!-- End Footer -->
+
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/js/main.js"></script>
+  
+
+  <div id="modalLoginForm" class="modal fade">
+    <div class="modal-dialog modal-login">
+      <div class="modal-content">
+        <form id="loginFrm" action="/examples/actions/confirmation.php" method="post">
+          <div class="modal-header">				
+            <h4 class="modal-title">Вход</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div id="loginStatusError" class="login-error"></div>
+            <div class="form-group">
+              <label for="loginEmail">Email</label>
+              <input type="text" id="loginEmail" class="form-control" required="required" autocomplete="on" data-autofocus="on">
+            </div>
+            <div class="form-group">
+              <div class="clearfix">
+                <label for="loginPassword">Пароль</label>
+<!--              <a href="#" class="float-end text-muted"><small>Забыли?</small></a> -->
+              </div>
+              <input type="password" id="loginPassword" class="form-control" required="required">
+            </div>
+          </div>
+          <div class="modal-footer justify-content-between">
+<!--          <a href="#" class="float-end text-muted"><small>Регистрация</small></a> -->
+            <a class="btn-login" id="loginBtn" href="#">Войти</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="assets/js/s4f-admin.js"></script>
+</body>
+</html>
